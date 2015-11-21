@@ -13,7 +13,9 @@ def readLines():
 		return line
 
 def readColumns(columnstring, column_list, table):
-	for column_name in columnstring.split("\t"):
+	columnsplit = columnstring.split("\t")
+	columnsplit.pop(0)
+	for column_name in columnsplit:
 		column_list.append( column_name)
 		table[column_name] = {}
 
