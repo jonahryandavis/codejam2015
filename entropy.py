@@ -21,7 +21,7 @@ def entropy(attributes, data, targetAttr, discrete):
 
     # Calculate the entropy of the data for the target attr
     for freq in valFreq.values():
-        dataEntropy += (-freq/len(data)) * math.log(freq/len(data), 2) 
+        dataEntropy += (-freq/len(data[targetAttr])) * math.log(freq/len(data[targetAttr]), 2) 
         
     return dataEntropy
 
