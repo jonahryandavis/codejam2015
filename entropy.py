@@ -12,16 +12,12 @@ def entropy(attributes, data, targetAttr, discrete):
     dataEntropy = 0.0
 
     # Calculate the frequency of each of the values in the target attr
-    for entry in data[targetAttr]:
-    	print(data[targetAttr][entry]) 	
-        if (valFreq.has_key(data[targetAttr][entry])):
-            valFreq[data[targetAttr][entry]] += 1.0
+    for key, entry in data[targetAttr].items():
+    	print(entry) 	
+        if (valFreq.has_key(entry)):
+            valFreq[entry] += 1.0
         else:
-            valFreq[data[targetAttr][entry]]  = 1.0
-
-    for key, entry in data[targetAttr]:
-    	print key
-    	print entry
+            valFreq[entry]  = 1.0
 
     # Calculate the entropy of the data for the target attr
     for freq in valFreq.values():
