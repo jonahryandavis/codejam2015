@@ -74,5 +74,47 @@ def entropyContinuous(data, targetAttr, threshold):
 
         return dataEntropy
 
+data = {"adult" : {"person1" : "yes", "person2" : "yes", "person3" : "yes", "person4" : "yes", "person5" : "yes", "person6" : "yes"},
+        "sex" : {"person1" : "M", "person2" : "F", "person3" : "M", "person4" : "F", "person5" : "F", "person6" : "M"},
+        "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0}}
+attr = "sex"
+targetAttr = "choice"
+attributes = ["adult", "sex"]
+
+def makeTree(data, attributes, target, recursion):
+    recursion += 1
+    #Returns a new decision tree based on the examples given.
+    #data = data[:]
+    vals = [record for record.values() in data[target]]
+    print(vals)
+
+    # If all the records in the dataset have the same classification,
+    # return that classification.
+    if vals.count(vals[0]) == len(vals):
+        return vals[0]
+    else:
+        # Choose the next best attribute to best classify our data
+        best = chooseAttr(data, attributes, target)
+        # Create a new decision tree/node with the best attribute and an empty
+        # dictionary object--we'll fill that up next.
+        tree = {best:{}}
+    
+        # Create a new decision tree/sub-node for each of the values in the
+        # best attribute field
+        for val in getValues(data, attributes, best):
+            # Create a subtree for the current value under the "best" field
+            examples = getExamples(data, attributes, best, val)
+            newAttr = attributes[:]
+            newAttr.remove(best)
+            subtree = makeTree(examples, newAttr, target, recursion)
+    
+            # Add the new subtree to the empty dictionary object in our new
+            # tree/node we just created.
+            tree[best][val] = subtree
+    
+    return tree
+
+print(makeTree(data, attributes, targetAttr, 0))
+
 if __name__ == "__main__":
 	sys.exit(main())
