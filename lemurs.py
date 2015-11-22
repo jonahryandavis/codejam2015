@@ -4,6 +4,7 @@ import sys
 import fileinput
 import math
 import gain
+import node
 
 def main(argv=None):
 	if argv is None:
