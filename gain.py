@@ -51,6 +51,5 @@ targetAttr = "choice"
 attributes = []
 for key in data.keys():
     if key != targetAttr:
-        print(key)
         attributes.append(key)
-print("Attribute: %s" % chooseAttr(data, attributes, targetAttr))
+#print("Attribute: %s" % chooseAttr(data, attributes, targetAttr))
