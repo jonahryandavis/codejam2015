@@ -18,16 +18,15 @@ def gain(data, target_attr, attr):
     # Calculate the sum of the entropy for each subset of records weighted
     # by their probability of occurring in the training set.
     for val in val_freq.keys():
-        print(val)
         val_prob = val_freq[val] / sum(val_freq.values())
         data_subset = dict([record for record in data[attr].items() if record[1] == val])
-        print(data_subset)
+        #print(data_subset)
         new_set = {}
         for key in data_subset.keys():
             new_set[key] = data[target_attr][key]
-        print(new_set)
+        #print(new_set)
         subset_entropy += val_prob * entropy.entropyDiscrete(new_set)
-        print(subset_entropy)
+        #print(subset_entropy)
         
     # Subtract the entropy of the chosen attribute from the entropy of the
     # whole data set with respect to the target attribute (and return it)
@@ -37,15 +36,21 @@ def chooseAttr(data, attributes, target):
     best = attributes[0]
     maxGain = 0;
     for attr in attributes:
-        newGain = gain(attributes, data, attr, target) 
+        newGain = gain(data, target, attr) 
         if newGain>maxGain:
             maxGain = newGain
             best = attr
     return best 
     
-data = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67},
-        "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0},
-        "sex" : {"person1" : "M", "person2" : "F", "person3" : "M", "person4" : "F", "person5" : "F", "person6" : "M"}}
+data = {"adult" : {"person1" : "yes", "person2" : "yes", "person3" : "yes", "person4" : "yes", "person5" : "yes", "person6" : "yes"},
+        "sex" : {"person1" : "M", "person2" : "F", "person3" : "M", "person4" : "F", "person5" : "F", "person6" : "M"},
+        "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0}}
 attr = "sex"
 targetAttr = "choice"
-print("Gain: %s" % gain(data, targetAttr, attr))
+#print("Gain: %s" % gain(data, targetAttr, attr))
+attributes = []
+for key in data.keys():
+    if key != targetAttr:
+        print(key)
+        attributes.append(key)
+print("Attribute: %s" % chooseAttr(data, attributes, targetAttr))
