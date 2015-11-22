@@ -54,33 +54,54 @@ def main(argv=None):
 	print "generated decision tree"
 	#Generate program
 	file = open('program.py', 'w')
-	file.write("import node\n\n")
+	file.write("import node\n")
+	file.write("import fileinput\n\n")
 	#open input file
-	file.write("data = [[]]\n")
+	file.write("def readLines():\n")
+	file.write("\tfor line in fileinput.input():\n")
+	file.write("\t\treturn line\n\n")
+	file.write("def readColumns(columnstring, column_list, table):\n")
+	file.write("\tcolumnsplit = columnstring.split(\"\\t\")\n")
+	file.write("\tcolumnsplit.pop(0)\n")
+	file.write("\tfor column_name in columnsplit:\n")
+	file.write("\t\tcolumn_list.append(column_name)\n")
+	file.write("\t\ttable[column_name] = {}\n\n")
 
-	file.write("f = open('testing.txt')\n")
-	#gather data
-	file.write("for line in f:\n\tline = line.strip(\"\\r\\n\")\n\tdata.append(line.split(','))\n")
-	file.write("data.remove([])\n")
+	file.write("def readRow(rowstring, column_list, table):\n")
+	file.write("\trowsplit = rowstring.split(\"\\t\")\n")
+	file.write("\tpatient_name = rowsplit.pop(0)\n")
+	file.write("\tfor i in range(0, len(rowsplit)):\n")
+	file.write("\t\ttable[column_list[i]][patient_name] = rowsplit[i]\n\n")
+
+	file.write("def createTable():\n")
+	file.write("\ttable = {}\n")
+	file.write("\tfilestring = readLines()\n")
+	file.write("\tfilesplit = filestring.split(\"\\r\")\n")
+	file.write("\tcolumn_list = []\n")
+	file.write("\tcolumnstring = filesplit.pop(0)\n")
+	file.write("\treadColumns(columnstring, column_list, table)\n")
+	file.write("\tfor rowstring in filesplit:\n")
+	file.write("\t\treadRow(rowstring, column_list, table)\n")
+	file.write("\treturn table\n\n")
+
+	file.write("data = createTable()\n")
 	#input dictionary tree
 	file.write("tree = %s\n" % str(tree))
-	file.write("attributes = %s\n" % str(attributes))
 	file.write("count = 0\n")
-	file.write("for entry in data:\n")
+	file.write("for key, entry in data.iteritems().next()[1].items():\n")
 	file.write("\tcount += 1\n")
 	#copy dictionary
 	file.write("\ttempDict = tree.copy()\n")
 	file.write("\tresult = \"\"\n")
 	#generate actual tree
 	file.write("\twhile(isinstance(tempDict, dict)):\n")
-	file.write("\t\troot = Node.Node(tempDict.keys()[0], tempDict[tempDict.keys()[0]])\n")
+	file.write("\t\troot = node.node(tempDict.keys()[0], tempDict[tempDict.keys()[0]])\n")
 	file.write("\t\ttempDict = tempDict[tempDict.keys()[0]]\n")
 	#this must be attribute
-	file.write("\t\tindex = attributes.index(root.value)\n")
-	file.write("\t\tvalue = entry[index]\n")
+	file.write("\t\tvalue = data[root.value][key]\n")
 	#ensure that key exists
 	file.write("\t\tif(value in tempDict.keys()):\n")
-	file.write("\t\t\tchild = Node.Node(value, tempDict[value])\n")
+	file.write("\t\t\tchild = node.node(value, tempDict[value])\n")
 	file.write("\t\t\tresult = tempDict[value]\n")
 	file.write("\t\t\ttempDict = tempDict[value]\n")
 	#otherwise, break
