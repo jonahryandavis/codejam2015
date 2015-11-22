@@ -41,15 +41,3 @@ def chooseAttr(data, attributes, target):
             maxGain = newGain
             best = attr
     return best 
-    
-data = {"adult" : {"person1" : "yes", "person2" : "yes", "person3" : "yes", "person4" : "yes", "person5" : "yes", "person6" : "yes"},
-        "sex" : {"person1" : "M", "person2" : "F", "person3" : "M", "person4" : "F", "person5" : "F", "person6" : "M"},
-        "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0}}
-attr = "sex"
-targetAttr = "choice"
-#print("Gain: %s" % gain(data, targetAttr, attr))
-attributes = []
-for key in data.keys():
-    if key != targetAttr:
-        attributes.append(key)
-#print("Attribute: %s" % chooseAttr(data, attributes, targetAttr))

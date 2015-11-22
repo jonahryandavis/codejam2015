@@ -1,0 +1,1 @@
+#Patient_id	SEX	PRIOR.MAL	PRIOR.CHEMO	PRIOR.XRT	Infectiontrain_id_1000	M	NO	NO	NO	Notrain_id_1001	M	YES	NO	YES	Notrain_id_1002	F	YES	YES	YES	Yes

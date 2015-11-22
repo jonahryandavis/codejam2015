@@ -3,14 +3,6 @@
 import math
 import gain
 
-data = {"adult" : {"person1" : "no", "person2" : "yes", "person3" : "yes", "person4" : "yes", "person5" : "yes", "person6" : "no"},
-        "sex" : {"person1" : "M", "person2" : "F", "person3" : "F", "person4" : "M", "person5" : "M", "person6" : "M"},
-        "school" : {"person1" : "1", "person2" : "2", "person3" : "2", "person4" : "1", "person5" : "1", "person6" : "2"},
-        "choice" : {"person1" : 0, "person2" : 0, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0}}
-attr = "sex"
-targetAttr = "choice"
-attributes = ["adult", "sex", "school"]
-
 def getOthers(data, attributes, best, val):
 	subset = dict([record for record in data[best].items() if record[1] == val])
 	#print(subset)
@@ -21,6 +13,15 @@ def getOthers(data, attributes, best, val):
 				if not (others.has_key(attr)) : others[attr] = {}
 				others[attr][key] = data[attr][key]
 	return others
+
+#get values in the column of the given attribute 
+def getValues(data, attributes, attr):
+    values = []
+    for key,value in data[attr].items():
+        if value not in values:
+            values.append(value)
+    #print values
+    return values
 
 def majority(attributes, data, target):
     #find target attribute
@@ -63,19 +64,15 @@ def makeTree(data, attributes, target, recursion):
     
         # Create a new decision tree/sub-node for each of the values in the
         # best attribute field
-        for val in data[best].values():
-	        # Create a subtree for the current value under the "best" field
-	        others = getOthers(data, attributes, best, val)
-	        newAttr = attributes[:]
-	        newAttr.remove(best)
-	        print (newAttr)
-	        print (others)
-	        subtree = makeTree(others, newAttr, target, recursion)
+        for val in getValues(data, attributes, best):
+            #print val
+            # Create a subtree for the current value under the "best" field
+            others = getOthers(data, attributes, best, val)
+            newAttr = attributes[:]
+            newAttr.remove(best)
+            subtree = makeTree(others, newAttr, target, recursion)
 
-	        # Add the new subtree to the empty dictionary object in our new
-	        # tree/node we just created.
-	        tree[best][val] = subtree
-    
+            # Add the new subtree to the empty dictionary object in our new
+            # tree/node we just created.
+            tree[best][val] = subtree
     return tree
-
-print(makeTree(data, attributes, targetAttr, 0))
