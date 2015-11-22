@@ -45,7 +45,7 @@ def entropyDiscrete(data, targetAttr):
 
     # Calculate the frequency of each of the values in the target attr
     for key, entry in data[targetAttr].items():
-        print(entry)
+        #print(entry)
         if (valFreq.has_key(entry)):
             valFreq[entry] += 1.0
         else:

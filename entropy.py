@@ -6,14 +6,14 @@ table = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67}, "sex" : {"per
 attributes = ["age", "sex"]
 
 #Calculates the entropy of the given data set for the target attr
-def entropyDiscrete(data, targetAttr):
+def entropyDiscrete(data):
 
     valFreq = {}
     dataEntropy = 0.0
 
     # Calculate the frequency of each of the values in the target attr
-    for key, entry in data[targetAttr].items():
-    	print(entry) 	
+    for key, entry in data.items():
+    	#print(entry) 	
         if (valFreq.has_key(entry)):
             valFreq[entry] += 1.0
         else:
@@ -21,7 +21,7 @@ def entropyDiscrete(data, targetAttr):
 
     # Calculate the entropy of the data for the target attr
     for freq in valFreq.values():
-        dataEntropy += (-freq/len(data[targetAttr])) * math.log(freq/len(data[targetAttr]), 2) 
+        dataEntropy += (-freq/len(data)) * math.log(freq/len(data), 2) 
         
     return dataEntropy
 
@@ -44,5 +44,5 @@ def entropyContinuous(data, targetAttr, threshold):
 
 
 
-print(entropyDiscrete(table, 'sex'))
-print(entropyContinuous(table, 'age', 22))
+#print(entropyDiscrete(table, 'sex'))
+#print(entropyContinuous(table, 'age', 22))

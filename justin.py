@@ -1,6 +1,6 @@
 import entropy
 
-def gain(data, attr, target_attr):
+def gain(data, target_attr, attr):
     
     # Calculates the information gain (reduction in entropy) that would
     # result by splitting the data on the chosen attribute (attr).
@@ -18,17 +18,20 @@ def gain(data, attr, target_attr):
     # Calculate the sum of the entropy for each subset of records weighted
     # by their probability of occurring in the training set.
     for val in val_freq.keys():
+        print(val)
         val_prob = val_freq[val] / sum(val_freq.values())
-        data_subset = dict([record for record in data[attr].items()])
+        data_subset = dict([record for record in data[attr].items() if record[1] == val])
         print(data_subset)
-        data_subset = dict([value for value in data_subset.items() if value[1] == val])
-        print(data_subset)
-        subset_entropy += val_prob * entropy.entropyDiscrete(data_subset, attr)
+        new_set = {}
+        for key in data_subset.keys():
+            new_set[key] = data[target_attr][key]
+        print(new_set)
+        subset_entropy += val_prob * entropy.entropyDiscrete(new_set)
         print(subset_entropy)
         
     # Subtract the entropy of the chosen attribute from the entropy of the
     # whole data set with respect to the target attribute (and return it)
-    return (entropy.entropyDiscrete(data, target_attr) - subset_entropy)
+    return (entropy.entropyDiscrete(data[target_attr]) - subset_entropy)
 
 def chooseAttr(data, attributes, target):
     best = attributes[0]
@@ -42,7 +45,7 @@ def chooseAttr(data, attributes, target):
     
 data = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67},
         "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0},
-        "sex" : {"person1" : "M", "person2" : "M", "person3" : "F", "person4" : "M", "person5" : "M", "person6" : "M"}}
+        "sex" : {"person1" : "M", "person2" : "F", "person3" : "M", "person4" : "F", "person5" : "F", "person6" : "M"}}
 attr = "sex"
 targetAttr = "choice"
 print("Gain: %s" % gain(data, targetAttr, attr))
