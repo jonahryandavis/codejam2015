@@ -21,17 +21,28 @@ def gain(data, attr, target_attr):
         val_prob = val_freq[val] / sum(val_freq.values())
         data_subset = dict([record for record in data[attr].items()])
         print(data_subset)
-        data_subset = {target_attr: dict([value for value in data_subset.items() if value[1] == val])}
+        data_subset = dict([value for value in data_subset.items() if value[1] == val])
         print(data_subset)
-        subset_entropy += val_prob * entropy.entropyDiscrete(data_subset, target_attr)
+        subset_entropy += val_prob * entropy.entropyDiscrete(data_subset, attr)
         print(subset_entropy)
         
     # Subtract the entropy of the chosen attribute from the entropy of the
     # whole data set with respect to the target attribute (and return it)
     return (entropy.entropyDiscrete(data, target_attr) - subset_entropy)
+
+def chooseAttr(data, attributes, target):
+    best = attributes[0]
+    maxGain = 0;
+    for attr in attributes:
+        newGain = gain(attributes, data, attr, target) 
+        if newGain>maxGain:
+            maxGain = newGain
+            best = attr
+    return best 
     
-data = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67}, 
-        "sex" : {"person1" : "F", "person2" : "F", "person3" : "M", "person4" : "A", "person5" : "A", "person6" : "M"}}
+data = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67},
+        "choice" : {"person1" : 0, "person2" : 1, "person3" : 0, "person4" : 1, "person5" : 1, "person6" : 0},
+        "sex" : {"person1" : "M", "person2" : "M", "person3" : "F", "person4" : "M", "person5" : "M", "person6" : "M"}}
 attr = "sex"
-targetAttr = "sex"
-print(gain(data, attr, targetAttr))
+targetAttr = "choice"
+print("Gain: %s" % gain(data, targetAttr, attr))
