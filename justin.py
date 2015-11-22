@@ -9,7 +9,6 @@ def gain(data, attr, target_attr):
 
     # Calculate the frequency of each of the values in the target attribute
     for key, val in data[attr].items():
-        print(val)
         if val_freq.has_key(val):
             val_freq[val] += 1.0
         else:
@@ -20,17 +19,19 @@ def gain(data, attr, target_attr):
     # by their probability of occurring in the training set.
     for val in val_freq.keys():
         val_prob = val_freq[val] / sum(val_freq.values())
-        data_subset = [record for record in data[attr].values() if record == val]
-        subset_entropy += val_prob * entropyDiscrete(data_subset, target_attr)
+        data_subset = dict([record for record in data[attr].items()])
+        print(data_subset)
+        data_subset = {target_attr: dict([value for value in data_subset.items() if value[1] == val])}
+        print(data_subset)
+        subset_entropy += val_prob * entropy.entropyDiscrete(data_subset, target_attr)
+        print(subset_entropy)
         
     # Subtract the entropy of the chosen attribute from the entropy of the
     # whole data set with respect to the target attribute (and return it)
-    return (entropyDiscrete(data, targetAttr, type) - subset_entropy)
+    return (entropy.entropyDiscrete(data, target_attr) - subset_entropy)
     
-
 data = {"age" : {"person1" : 45, "person2" : 23, "person3" : 67}, 
-        "sex" : {"person1" : "F", "person2" : "F", "person3" : "M"}}
+        "sex" : {"person1" : "F", "person2" : "F", "person3" : "M", "person4" : "A", "person5" : "A", "person6" : "M"}}
 attr = "sex"
-type = "discrete"
 targetAttr = "sex"
-gain(data, attr, targetAttr)
+print(gain(data, attr, targetAttr))
